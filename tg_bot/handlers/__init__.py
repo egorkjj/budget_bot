@@ -1,1 +1,3 @@
-from .user_handlers import register_handlers
+from .admin_expence import register_handlers_expence
+from .admin_income import register_handlers_income
+from .admin_excel import register_excel
