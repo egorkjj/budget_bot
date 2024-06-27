@@ -37,3 +37,9 @@ def income_decline():
     kb.add(InlineKeyboardButton(text = "Отменить добавление", callback_data="decline_income"))
     return kb
 
+def income_payment():
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton(text = "Предоплата 100%", callback_data="income_payment_Предоплата\u2009100%"))
+    kb.add(InlineKeyboardButton(text="Предоплата", callback_data= "income_payment_Предоплата"))
+    kb.add(InlineKeyboardButton(text="Доплата 100%", callback_data="income_payment_Доплата\u2009100%"))
+    return kb

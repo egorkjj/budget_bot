@@ -1,7 +1,7 @@
 from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from tg_bot.states import income
-from tg_bot.keyboards import manager_kb_income, types_income, income_comment_kb, income_decline, is_cash_income_kb
+from tg_bot.keyboards import manager_kb_income, types_income, income_comment_kb, income_decline, is_cash_income_kb, income_payment
 from tg_bot.DBSM import add_income
 def register_handlers_income(dp: Dispatcher):
     dp.register_message_handler(add_income_step1, commands=["income"])
@@ -11,6 +11,7 @@ def register_handlers_income(dp: Dispatcher):
     dp.register_callback_query_handler(add_income_step4, text_startswith = "income_comment", state = income.select_comment)
     dp.register_message_handler(add_income_comment, state = income.type_comment)
     dp.register_message_handler(add_income_step5, state = income.type_summ)
+    dp.register_callback_query_handler(add_income_step6, state = income.type_order, text_startswith = "income_payment")
     dp.register_callback_query_handler(decline_add_income, state = "*", text = "decline_income")
     
 async def add_income_step1(message: types.Message, state: FSMContext): # начало
@@ -68,10 +69,17 @@ async def add_income_step5(message: types.Message, state: FSMContext):
     
     async with state.proxy() as data:
         data["summ_income"] = float(message.text.replace(",", "."))
-    await message.answer("Добавление дохода завершено")
+    await message.answer("Выберите тип оплаты в заказе", reply_markup= income_payment())
+    await income.type_order.set()
+
+async def add_income_step6(call: types.CallbackQuery, state: FSMContext):
+    pay = call.data.split("_")[2]
+    async with state.proxy() as data:
+        data["payment_type"] = pay
+    await call.message.answer("Добавление дохода завершено")
 
     async with state.proxy() as data:
-        add_income(data["manager_income"], data["comment_income"], data["type_income"], data["summ_income"], data["is_cash"])
+        add_income(data["manager_income"], data["comment_income"], data["type_income"], data["summ_income"], data["is_cash"], data["payment_type"])
     await state.finish()
 
 async def decline_add_income(call:types.CallbackQuery, state: FSMContext):
