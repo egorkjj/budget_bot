@@ -14,7 +14,6 @@ def types_exp():
     kb.add(InlineKeyboardButton(text = "Топливо", callback_data= "expence_type_Топливо"))
     kb.add(InlineKeyboardButton(text = "Запчасти", callback_data= "expence_type_Запчасти"))
     kb.add(InlineKeyboardButton(text = "Хозрасходы", callback_data= "expence_type_Хозрасходы"))
-    kb.add(InlineKeyboardButton(text = "Запчасти", callback_data= "expence_type_Запчасти"))
     kb.add(InlineKeyboardButton(text = "Скидки/рекламации/возврат", callback_data= "expence_type_Скидки/рекламации/возврат"))
     kb.add(InlineKeyboardButton(text = "Прочее", callback_data= "expence_type_Прочее"))
     kb.add(InlineKeyboardButton(text = "Расходы шефа", callback_data= "expence_type_Расходы\u2009шефа"))
