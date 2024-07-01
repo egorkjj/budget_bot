@@ -81,6 +81,6 @@ async def add_income_step7(message: types.Message, state: FSMContext):
     await state.finish()
 
 async def decline_add_income(call:types.CallbackQuery, state: FSMContext):
-    if await state.get_state() in ["income:select_comment", "income:select_manager", "income:type_comment", "income:type_summ", "income:select_type", "income:select_is_cash"]:
+    if await state.get_state() in ["income:select_comment", "income:select_manager", "income:type_comment", "income:type_summ", "income:select_type", "income:select_is_cash", "income:type_fio"]:
         await state.finish()
         await call.message.answer("Хорошо, добавление дохода завершено")
