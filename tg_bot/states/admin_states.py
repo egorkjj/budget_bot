@@ -15,3 +15,4 @@ class income(StatesGroup):
     type_summ = State()
     type_comment = State()
     type_order = State()
+    type_fio = State()

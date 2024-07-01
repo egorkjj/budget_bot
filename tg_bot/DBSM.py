@@ -25,6 +25,7 @@ class Incomes(Base):
     summ = Column(Float, nullable=True)
     date = Column(DateTime, nullable=True)
     order = Column(Text, nullable=True)
+    fio = Column(Text, nullable=True)
 
 class Expences(Base):
     __tablename__ = "expences"
@@ -47,11 +48,11 @@ def add_expence(manager, comment, type, summ):
     session.close()
 
 
-def add_income(manager, comment, type, summ, is_cash, payment_type):
+def add_income(manager, comment, type, summ, is_cash, payment_type, fio):
     Session = sessionmaker()
     session = Session(bind = engine)
     date_now = datetime.now(pytz.timezone('Europe/Moscow'))
-    new = Incomes(manager = manager, income_type = type, summ = summ, comment = comment, is_cash = is_cash, date = date_now, order = payment_type)
+    new = Incomes(manager = manager, income_type = type, summ = summ, comment = comment, is_cash = is_cash, date = date_now, order = payment_type, fio=fio)
     session.add(new)
     session.commit()
     session.close()
@@ -77,6 +78,7 @@ def review_for_day_for_managers():
                     "type": j.income_type,
                     "comment": j.comment,
                     "summ": j.summ,
+                    "fio": j.fio
                 })
         query_expences = session.query(Expences).filter(Expences.manager == i, Expences.date > earliest_today, Expences.date < latest_today).all()
         sum_expences = 0
@@ -86,7 +88,8 @@ def review_for_day_for_managers():
                 "is_income": False,
                 "type": j.expence_type,
                 "comment": j.comment,
-                "summ": j.summ
+                "summ": j.summ,
+                "fio": "-"
             })
         cash_summ = sum_incomes - sum_expences
         cash_summ = round(cash_summ, 2)
@@ -122,6 +125,7 @@ def month_rev():
             "type": "Наличные" if i.is_cash else "Безнал",
             "comment": i.comment if i.comment != "отсутствует" else "❌",
             "pay": i.order,
+            "fio": i.fio
         })
 
     for i in query_expence:
@@ -133,7 +137,8 @@ def month_rev():
             "cat": i.expence_type,
             "type": "Наличные",
             "comment": i.comment if i.comment != "отсутствует" else "❌",
-            "pay": "-"
+            "pay": "-",
+            "fio": "-"
         })
 
     session.close()

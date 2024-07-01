@@ -50,6 +50,8 @@ async def cash_reviews_for_today(message: types.Message, state: FSMContext):
         sheet['C1'].font = Font(color="FF0000")
         sheet["D1"] = "Сумма"
         sheet['D1'].font = Font(color="FF0000") 
+        sheet["E1"] = "ФИО"
+        sheet['E1'].font = Font(color="FF0000") 
 
     for i in range(3):
         shit = sheets[i]
@@ -60,14 +62,16 @@ async def cash_reviews_for_today(message: types.Message, state: FSMContext):
             shit[f"B{j+2}"] = query[j]["type"] if query[j]["type"] != "отсутствует" else "-"
             shit[f"C{j+2}"] = query[j]["comment"] if query[j]["comment"] != "отсутствует" else "❌"
             shit[f"D{j+2}"] = f'{query[j]["summ"]} бел.руб.'
+            shit[f"E{j+2}"] = query[j]["fio"]
+
 
         row = len(query) + 2
         shit.merge_cells(f"B{row}:C{row}")
         shit.merge_cells(f"B{row+1}:C{row+1}")
         shit[f"B{row+1}"] = f"{cash} бел.руб."
         shit[f"B{row}"] = "Итого"
-        shit[f"B{row}"].font = Font(color = "00FF00")
-        shit[f"B{row+1}"].font = Font(color = "00FF00")
+        shit[f"B{row}"].font = Font(color = "FF0000")
+        shit[f"B{row+1}"].font = Font(color = "FF0000")
         shit[f"B{row}"].alignment = Alignment(horizontal= "center")
         shit[f"B{row+1}"].alignment = Alignment(horizontal= "center")
 
@@ -104,6 +108,8 @@ async def month_excel(message: types.Message, state: FSMContext):
         sheet['F1'].font = Font(color="FF0000")
         sheet["G1"] = "Оплата"
         sheet['G1'].font = Font(color="FF0000")
+        sheet["H1"] = "ФИО"
+        sheet['H1'].font = Font(color="FF0000")
 
      
     for i in range(2):
@@ -118,16 +124,19 @@ async def month_excel(message: types.Message, state: FSMContext):
             shit[f"E{j+2}"] = query[j]["comment"]
             shit[f"F{j+2}"] = query[j]["summ"]
             shit[f"G{j+2}"] = query[j]["pay"]
+            shit[f"H{j+2}"] = query[j]["fio"]
+
+
 
         row = len(query) + 2
-        shit.merge_cells(f"C{row}:D{row}")
-        shit.merge_cells(f"C{row+1}:D{row+1}")
-        shit[f"C{row+1}"] = f"{sums} бел.руб."
-        shit[f"C{row}"] = "Доходы за месяц" if i == 0 else "Расходы за месяц"
-        shit[f"C{row}"].font = Font(color = "00FF00")
-        shit[f"C{row+1}"].font = Font(color = "00FF00")
-        shit[f"C{row}"].alignment = Alignment(horizontal= "center")
-        shit[f"C{row+1}"].alignment = Alignment(horizontal= "center")
+        shit.merge_cells(f"D{row}:E{row}")
+        shit.merge_cells(f"D{row+1}:E{row+1}")
+        shit[f"D{row+1}"] = f"{sums} бел.руб."
+        shit[f"D{row}"] = "Доходы за месяц" if i == 0 else "Расходы за месяц"
+        shit[f"D{row}"].font = Font(color = "FF0000")
+        shit[f"D{row+1}"].font = Font(color = "FF0000")
+        shit[f"D{row}"].alignment = Alignment(horizontal= "center")
+        shit[f"D{row+1}"].alignment = Alignment(horizontal= "center")
     
     if not os.path.isdir("tg_bot/excel"):
         os.mkdir("tg_bot/excel")
